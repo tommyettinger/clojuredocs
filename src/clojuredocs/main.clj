@@ -55,9 +55,8 @@
              body
              [:footer
               [:hr {:align "left"}]
-              [:p "Idea by "
-               [:a {:href "https://github.com/TimMc"} "TimMc"]
-               ". Webified by "
+              [:p
+               "By "
                [:a {:href "https://github.com/sdegutis"} "sdegutis"]
                ". Source "
                [:a {:href "https://github.com/sdegutis/clojuredocs"} "on github"]
