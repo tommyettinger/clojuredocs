@@ -1,4 +1,4 @@
-(ns clojuretip.main
+(ns clojuredocs.main
   (:require [ring.adapter.jetty :as jetty]
             [hiccup.core :refer [html]]
             [hiccup.page :refer [html5]]
@@ -78,7 +78,7 @@
                    ". Webified by "
                    [:a {:href "https://github.com/sdegutis"} "sdegutis"]
                    ". Source "
-                   [:a {:href "https://github.com/sdegutis/clojuretip"} "on github"]
+                   [:a {:href "https://github.com/sdegutis/clojuredocs"} "on github"]
                    "."]]]]))]
     {:status 200
      :headers {"Content-Type" "text/html"}
