@@ -10,7 +10,7 @@
   (css
    [:#home
     [:a {:text-decoration "none"
-         :margin "5px"}]]
+         :margin-right "5px"}]]
    [:#container {:margin "30px"}]
    [:#primary {:font-weight "bold"}]
    [:ul {:list-style-type "none"
