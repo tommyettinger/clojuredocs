@@ -81,7 +81,7 @@
           [:p
            [:h4 (format "%c" group-char)]
            (interpose " "
-                      (for [nm names]
+                      (for [nm (sort names)]
                         [:a {:href (str "/" (deque (str nm)))}
                          nm]))])])))
   (GET "/:nm" [nm :as req]
