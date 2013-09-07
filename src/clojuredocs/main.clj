@@ -9,6 +9,9 @@
 (def style
   (css
    [:#home
+    [:td {:padding-bottom "20px"
+          :vertical-align "top"}]
+    [:#group-char {:width "50px"}]
     [:a {:text-decoration "none"
          :margin-right "5px"}]]
    [:#container {:margin "30px"}]
@@ -77,13 +80,14 @@
           groups (group-by #(.charAt % 0) names)]
       (template
        [:div#home
-        (for [[group-char names] groups]
-          [:p
-           [:h4 (format "%c" group-char)]
-           (interpose " "
-                      (for [nm (sort names)]
-                        [:a {:href (str "/" (deque (str nm)))}
-                         nm]))])])))
+        [:table
+         (for [[group-char names] (sort-by first groups)]
+           [:tr
+            [:td#group-char (format "%c" group-char)]
+            [:td (interpose " "
+                            (for [nm (sort names)]
+                              [:a {:href (str "/" (enque (str nm)))}
+                               nm]))]])]])))
   (GET "/:nm" [nm :as req]
     (let [nm (var-for (deque nm))
           name-meta (meta nm)
