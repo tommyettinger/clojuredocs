@@ -94,7 +94,7 @@
    "clojure.core.protocols"
    "clojure.data"
    "clojure.inspector"
-   "clojure.java"
+   ;; "clojure.java"
    "clojure.java.browse"
    "clojure.java.browse-ui"
    "clojure.java.io"
@@ -119,6 +119,7 @@
     (.write w "It's just a wiki that was pre-seeded with Clojure 1.5.1 data and examples.\n\n")
     (.write w "Anyone and everyone is welcome to edit it. Enjoy!\n\n")
     (doseq [namespace all-namespaces-to-use]
+      (println "Doing namespace" namespace)
       (let [names (all-core-names namespace)
             groups (group-by #(.charAt % 0) names)]
         (.write w (str "### " namespace "\n\n"))
