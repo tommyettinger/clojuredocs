@@ -10,6 +10,7 @@
    "def"
    "if"
    "do"
+   "."
    "let"
    "quote"
    "var"
@@ -45,7 +46,7 @@
   (cond
     (.endsWith nm "?") (str (subs nm 0 (- (count nm) 1)) "_q")
     (= nm "/") "_"
-    ;; (= nm ".") "_dot"
+    (= nm ".") "_dot"
     (= nm "..") "_dotdot"
     :else nm))
 
