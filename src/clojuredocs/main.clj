@@ -60,7 +60,8 @@
           (doseq [ex exs]
             (.write w "\n\n```clojure\n")
             (.write w (-> ex
-                          (s/replace "\\\"" "\\\\\"")))
+                          (s/replace "\\\"" "\\\\\"")
+                          (s/replace "\\k" "BACKSLASH-k")))
             (.write w "\n```\n\n"))
           (.write w "No examples.\n\n")))
 
