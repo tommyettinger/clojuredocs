@@ -112,6 +112,29 @@
    "clojure.xml"
    "clojure.zip"])
 
+(defn add-namespace [w namespace]
+  (let [names (all-core-names namespace)
+        groups (group-by #(.charAt % 0) names)]
+    (println "Doing namespace" namespace)
+    (.write w (str "### " namespace "\n\n"))
+    (if-let [ns-doc (:doc (meta (the-ns (symbol namespace))))]
+      (.write w (str "```text\n" ns-doc "\n```\n\n")))
+    (.write w "char | names\n")
+    (.write w "---- | -----\n")
+    (doseq [[group-char names] (sort-by first groups)]
+      (.write w (format "%c | " group-char))
+      (doseq [short-name (sort names)]
+        (let [fq-enqued-name (str namespace "-" (fix-for-wiki short-name))
+              display-name (fix-for-markdown short-name)]
+          (.write w (format "[%s](wiki/%s) &nbsp; &nbsp; " display-name fq-enqued-name)))
+        (seed-page short-name namespace))
+      (.write w "\n"))
+    (.write w "\n\n")))
+
+(defn add [namespace]
+  (with-open [w (writer "wiki/Home.md" :append true)]
+    (add-namespace w namespace)))
+
 (defn -main []
   (println "Seeding wiki...")
   (with-open [w (writer "wiki/Home.md")]
@@ -119,21 +142,5 @@
     (.write w "It's just a wiki that was pre-seeded with Clojure 1.5.1 data and examples.\n\n")
     (.write w "Anyone and everyone is welcome to edit it. Enjoy!\n\n")
     (doseq [namespace all-namespaces-to-use]
-      (println "Doing namespace" namespace)
-      (let [names (all-core-names namespace)
-            groups (group-by #(.charAt % 0) names)]
-        (.write w (str "### " namespace "\n\n"))
-        (if-let [ns-doc (:doc (meta (the-ns (symbol namespace))))]
-          (.write w (str "```text\n" ns-doc "\n```\n\n")))
-        (.write w "char | names\n")
-        (.write w "---- | -----\n")
-        (doseq [[group-char names] (sort-by first groups)]
-          (.write w (format "%c | " group-char))
-          (doseq [short-name (sort names)]
-            (let [fq-enqued-name (str namespace "-" (fix-for-wiki short-name))
-                  display-name (fix-for-markdown short-name)]
-              (.write w (format "[%s](wiki/%s) &nbsp; &nbsp; " display-name fq-enqued-name)))
-            (seed-page short-name namespace))
-          (.write w "\n"))
-        (.write w "\n"))))
+      (add-namespace w namespace)))
   (println "Done."))
