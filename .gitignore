@@ -3,3 +3,4 @@
 /.lein-*
 /.env
 .nrepl-port
+/wiki
