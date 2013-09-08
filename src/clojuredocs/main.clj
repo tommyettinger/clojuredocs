@@ -88,11 +88,8 @@
 (def all-namespaces-to-use
   ["clojure.core"
    "clojure.string"
-   "clojure.set"
    "clojure.pprint"
-   "clojure.reflect"
    "clojure.repl"
-   "clojure.stacktrace"
    "clojure.template"
    "clojure.test"
    "clojure.walk"
