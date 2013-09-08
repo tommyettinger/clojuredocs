@@ -5,6 +5,7 @@
             [cd-client.core :refer [examples-core see-also-core]]))
 
 (defn all-core-names [namespace]
+  (require (symbol namespace))
   (->> namespace
        (symbol)
        (the-ns)
@@ -88,8 +89,11 @@
 (def all-namespaces-to-use
   ["clojure.core"
    "clojure.string"
+   "clojure.set"
    "clojure.pprint"
+   "clojure.reflect"
    "clojure.repl"
+   "clojure.stacktrace"
    "clojure.template"
    "clojure.test"
    "clojure.walk"
