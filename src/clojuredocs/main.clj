@@ -15,9 +15,9 @@
 
 (defn fix-for-wiki [nm]
   (-> nm
-      (s/replace #"<" "[LT]")
-      (s/replace #">" "[GT]")
-      (s/replace #"+" "[Plus]")
+      (s/replace "<" "[LT]")
+      (s/replace ">" "[GT]")
+      (s/replace "+" "[Plus]")
       (s/replace #"^/$" "[Slash]")
       (s/replace #"\?$" "[Q]")))
 
