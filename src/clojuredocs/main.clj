@@ -70,7 +70,7 @@
           (do (doseq [ref (map :name refs)]
                 (let [fq-enqued-name (str namespace "-" (fix-for-wiki ref))
                       display-name (fix-for-markdown ref)]
-                  (.write w (format " &nbsp; [%s](%s) &nbsp; " display-name fq-enqued-name))))
+                  (.write w (format "[%s](%s) &nbsp; &nbsp; " display-name fq-enqued-name))))
               (.write w "\n\n"))
           (.write w "Nothing linked.\n\n")))
 
@@ -126,7 +126,7 @@
       (doseq [short-name (sort names)]
         (let [fq-enqued-name (str namespace "-" (fix-for-wiki short-name))
               display-name (fix-for-markdown short-name)]
-          (.write w (format " &nbsp [%s](wiki/%s); &nbsp; " display-name fq-enqued-name)))
+          (.write w (format "[%s](wiki/%s) &nbsp; &nbsp; " display-name fq-enqued-name)))
         (seed-page short-name namespace))
       (.write w "\n"))
     (.write w "\n\n")))
