@@ -122,6 +122,8 @@
       (let [names (all-core-names namespace)
             groups (group-by #(.charAt % 0) names)]
         (.write w (str "### " namespace "\n\n"))
+        (if-let [ns-doc (:doc (meta (the-ns (symbol namespace))))]
+          (.write w (str "```text\n" ns-doc "\n```\n\n")))
         (.write w "char | names\n")
         (.write w "---- | -----\n")
         (doseq [[group-char names] (sort-by first groups)]
