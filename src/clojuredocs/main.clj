@@ -59,7 +59,8 @@
         (if-not (empty? exs)
           (doseq [ex exs]
             (.write w "\n\n```clojure\n")
-            (.write w ex)
+            (.write w (-> ex
+                          (s/replace "\\\"" "\\\\\"")))
             (.write w "\n```\n\n"))
           (.write w "No examples.\n\n")))
 
