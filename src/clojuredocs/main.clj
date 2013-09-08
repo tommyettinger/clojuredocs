@@ -94,7 +94,6 @@
    "clojure.core.protocols"
    "clojure.data"
    "clojure.inspector"
-   ;; "clojure.java"
    "clojure.java.browse"
    "clojure.java.browse-ui"
    "clojure.java.io"
