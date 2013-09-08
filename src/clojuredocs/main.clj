@@ -76,7 +76,8 @@
 
       (.write w "#### Other docs\n\n")
       (.write w (str "[official docs](http://clojure.github.io/clojure/" namespace "-api.html#" namespace "/" short-name ") &mdash; "))
-      (.write w (str "[clojuredocs.org](http://clojuredocs.org/clojure_core/" namespace "/" (fix-for-clojuredocs short-name) ")\n\n"))
+      (.write w (str "[clojuredocs.org](http://clojuredocs.org/clojure_core/" namespace "/" (fix-for-clojuredocs short-name) ") &mdash; "))
+      (.write w (str "[getclojure.org](http://getclojure.org/search?q=" short-name "&num=0)\n\n"))
 
       (.write w "\n#### Source\n\n")
       (if-let [src (source-fn (symbol short-name))]
