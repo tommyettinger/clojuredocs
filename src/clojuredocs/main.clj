@@ -19,7 +19,7 @@
       (s/replace ">" "[GT]")
       (s/replace "+" "[Plus]")
       (s/replace #"^/$" "[Slash]")
-      (s/replace #"\?$" "[Q]")))
+      (s/replace #"\?$" "_q")))
 
 (defn fix-for-clojuredocs [nm]
   (cond
@@ -70,14 +70,14 @@
           (do (doseq [ref (map :name refs)]
                 (let [fq-enqued-name (str namespace "-" (fix-for-wiki ref))
                       display-name (fix-for-markdown ref)]
-                  (.write w (format "[%s](%s) &nbsp; &nbsp; " display-name fq-enqued-name))))
+                  (.write w (format "- [%s](%s)\n" display-name fq-enqued-name))))
               (.write w "\n\n"))
           (.write w "Nothing linked.\n\n")))
 
       (.write w "#### Other docs\n\n")
-      (.write w (str "[official docs](http://clojure.github.io/clojure/" namespace "-api.html#" namespace "/" short-name ") &mdash; "))
-      (.write w (str "[clojuredocs.org](http://clojuredocs.org/clojure_core/" namespace "/" (fix-for-clojuredocs short-name) ") &mdash; "))
-      (.write w (str "[getclojure.org](http://getclojure.org/search?q=" short-name "&num=0)\n\n"))
+      (.write w (str "- [official docs](http://clojure.github.io/clojure/" namespace "-api.html#" namespace "/" short-name ")\n"))
+      (.write w (str "- [clojuredocs.org](http://clojuredocs.org/clojure_core/" namespace "/" (fix-for-clojuredocs short-name) ")\n"))
+      (.write w (str "- [getclojure.org](http://getclojure.org/search?q=" short-name "&num=0)\n\n"))
 
       (.write w "\n#### Source\n\n")
       (if-let [src (source-fn (symbol short-name))]
