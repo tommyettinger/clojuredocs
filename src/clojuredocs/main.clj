@@ -17,7 +17,7 @@
   (-> nm
       (s/replace #"<" "[LT]")
       (s/replace #">" "[GT]")
-      (s/replace #"-" "[Dash]")
+      ;; (s/replace #"-" "[Dash]")
       (s/replace #"^/$" "[Slash]")
       (s/replace #"\?$" "[Q]")))
 
