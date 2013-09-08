@@ -163,7 +163,7 @@
                     (let [fq-enqued-name (str namespace "-" (fix-for-wiki short-name))
                           display-name (fix-for-markdown short-name)]
                       (format "[%s](wiki/%s)" display-name fq-enqued-name)))]
-        (doseq [text (interpose " &mdash; " links)]
+        (doseq [text (interpose " , " links)]
           (.write w text)))
       (.write w "\n"))
     (.write w "\n\n")))
