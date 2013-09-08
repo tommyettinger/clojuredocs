@@ -158,10 +158,13 @@
     (doseq [[group-char names] (sort-by first groups)]
       (.write w (format "%c | " group-char))
       (doseq [short-name (sort names)]
-        (let [fq-enqued-name (str namespace "-" (fix-for-wiki short-name))
-              display-name (fix-for-markdown short-name)]
-          (.write w (format "[%s](wiki/%s) &nbsp; &nbsp; " display-name fq-enqued-name)))
         (seed-page short-name namespace))
+      (let [links (for [short-name (sort names)]
+                    (let [fq-enqued-name (str namespace "-" (fix-for-wiki short-name))
+                          display-name (fix-for-markdown short-name)]
+                      (format "[%s](wiki/%s)" display-name fq-enqued-name)))]
+        (doseq [text (interpose " &mdash; " links)]
+          (.write w text)))
       (.write w "\n"))
     (.write w "\n\n")))
 
