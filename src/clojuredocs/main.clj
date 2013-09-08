@@ -4,14 +4,34 @@
             [clojure.string :as s]
             [cd-client.core :refer [examples-core see-also-core]]))
 
+(def special-forms
+  ["new"
+   "set!"
+   "def"
+   "if"
+   "do"
+   "let"
+   "quote"
+   "var"
+   "recur"
+   "throw"
+   "try"
+   "monitor-enter"
+   "monitor-exit"])
+
+(defn special-forms? [ns]
+  (= ns "special-forms"))
+
 (defn all-core-names [namespace]
-  (require (symbol namespace))
-  (->> namespace
-       (symbol)
-       (the-ns)
-       (ns-publics)
-       (map first)
-       (map str)))
+  (if (special-forms? namespace)
+    special-forms
+    (do (require (symbol namespace))
+        (->> namespace
+             (symbol)
+             (the-ns)
+             (ns-publics)
+             (map first)
+             (map str)))))
 
 (defn fix-for-wiki [nm]
   (-> nm
@@ -35,9 +55,18 @@
 
 (defn seed-page [short-name namespace]
   (let [filename (str "wiki/" namespace "-" (fix-for-wiki short-name) ".md")
-        v (find-var (symbol namespace short-name))
-        m (meta v)
-        display-name (fix-for-markdown (:name m))]
+        official-docs-link (if (special-forms? namespace)
+                             (str "http://clojure.org/special_forms#" short-name)
+                             (str "http://clojure.github.io/clojure/" namespace "-api.html#" namespace "/" short-name))
+        m (if (special-forms? namespace)
+            {:name short-name
+             :doc (str "Please see " official-docs-link)}
+            (meta (find-var (symbol namespace short-name))))
+        display-name (fix-for-markdown (:name m))
+        ns-for-clojuredocs (if (special-forms? namespace)
+                             "clojure.core"
+                             namespace)
+        ]
     (with-open [w (writer filename)]
       (.write w "-\n\n")
 
@@ -54,7 +83,7 @@
         (.write w "\n```\n"))
 
       (.write w "\n\n#### Exampes\n\n")
-      (let [exs (->> (:examples (examples-core namespace short-name))
+      (let [exs (->> (:examples (examples-core ns-for-clojuredocs short-name))
                      (map :body))]
         (if-not (empty? exs)
           (doseq [ex exs]
@@ -66,7 +95,7 @@
           (.write w "No examples.\n\n")))
 
       (.write w "\n\n#### See also\n\n")
-      (let [refs (see-also-core namespace short-name)]
+      (let [refs (see-also-core ns-for-clojuredocs short-name)]
         (if-not (empty? refs)
           (do (doseq [ref (map :name refs)]
                 (let [fq-enqued-name (str namespace "-" (fix-for-wiki ref))
@@ -76,8 +105,8 @@
           (.write w "Nothing linked.\n\n")))
 
       (.write w "#### Other docs\n\n")
-      (.write w (str "- [official docs](http://clojure.github.io/clojure/" namespace "-api.html#" namespace "/" short-name ")\n"))
-      (.write w (str "- [clojuredocs.org](http://clojuredocs.org/clojure_core/" namespace "/" (fix-for-clojuredocs short-name) ")\n"))
+      (.write w (str "- [official docs](" official-docs-link ")\n"))
+      (.write w (str "- [clojuredocs.org](http://clojuredocs.org/clojure_core/" ns-for-clojuredocs "/" (fix-for-clojuredocs short-name) ")\n"))
       (.write w (str "- [getclojure.org](http://getclojure.org/search?q=" short-name "&num=0)\n\n"))
 
       (.write w "\n#### Source\n\n")
@@ -90,7 +119,8 @@
       )))
 
 (def all-namespaces-to-use
-  ["clojure.core"
+  ["special-forms"
+   "clojure.core"
    "clojure.string"
    "clojure.set"
    "clojure.test"
@@ -119,8 +149,9 @@
         groups (group-by #(.charAt % 0) names)]
     (println "Doing namespace" namespace)
     (.write w (str "### " namespace "\n\n"))
-    (if-let [ns-doc (:doc (meta (the-ns (symbol namespace))))]
-      (.write w (str "```text\n" ns-doc "\n```\n\n")))
+    (if-not (special-forms? namespace)
+      (if-let [ns-doc (:doc (meta (the-ns (symbol namespace))))]
+        (.write w (str "```text\n" ns-doc "\n```\n\n"))))
     (.write w "char | names\n")
     (.write w "---- | -----\n")
     (doseq [[group-char names] (sort-by first groups)]
